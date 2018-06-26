@@ -1,0 +1,198 @@
+﻿@{
+    ViewData["Title"] = "Edit Items";
+}
+
+@{
+    Controllers.ItemsClientController itemClient = new Controllers.ItemsClientController();
+    await itemClient.Get();
+}
+
+<script type="text/javascript"
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+
+</script>
+
+<script>
+function updateItem(item) {
+    document.getElementById("itemid").value = item.id;
+    document.getElementById("itemtitle").value = item.title;
+    document.getElementById("itemdescription").value = item.description;
+    document.getElementById("itemimage").value = item.image;
+
+//@*<a href="@(item.Url)"><img border="0" class="image" alt="item" src="@(item.Image)"></a>*@
+//document.getElementById("image").src = item.image;
+
+
+    document.getElementById("itemurl").value = item.url;
+    document.getElementById("itemcountries").value = item.countries;
+    document.getElementById("itemstart").value = item.start;
+    document.getElementById("itemend").value = item.end;
+    document.getElementById("itemrating").value = item.rating;
+    if(item.premium.toLowerCase() == 'true'){
+        document.getElementById("itempremium").checked = item.premium.toLowerCase();
+    }
+    if(item.active.toLowerCase() == 'true'){
+        document.getElementById("itemactive").checked = item.active.toLowerCase();
+    }
+};
+
+function itemDelete() {
+    id = document.getElementById("itemid").value;
+    var url = `api/Items/${id}`;
+
+    $.ajax({
+      type: "DELETE",
+      url: url,
+      contentType: "application/json; charset=utf-8",
+     success: function (msg) {
+          //alert('success');
+     },
+     error: function (e) {
+          //alert('fail');
+     }
+    }).done(function( msg ) {
+      //alert( "Data Saved: " + msg );
+    });
+
+    window.location.reload();
+}
+
+function itemPut() {
+    var id = document.getElementById("itemid").value;
+    var title = document.getElementById("itemtitle").value;
+    var description = document.getElementById("itemdescription").value;
+    var image = document.getElementById("itemimage").value;
+    var url = document.getElementById("itemurl").value;
+    var countries = document.getElementById("itemcountries").value;
+    var start = document.getElementById("itemstart").value;
+    var end = document.getElementById("itemend").value;
+    var rating = document.getElementById("itemrating").value;
+    var premium = $("#itempremium").is(":checked");
+    var active = $("#itemactive").is(":checked");
+
+    if(id > 0) {
+        var item = `{"id":"${id}", "title":"${title}", "description":"${description}", "image":"${image}", "url":"${url}", "countries":"${countries}", "StartDate":"${start}", "EndDate":"${end}", "rating":"${rating}", "PremiumFlag":"${premium}", "ActiveFlag":"${active}"}`;
+        var url = `api/Items/${id}`;
+//alert(item);
+        $.ajax({
+          type: "PUT",
+          url: url,
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          data: item,
+         success: function (msg) {
+              //alert('success');
+         },
+         error: function (e) {
+              //alert('fail');
+         }
+        }).done(function( msg ) {
+          //alert( "Data Saved: " + msg );
+        });
+    } else {
+        var item = `{"title":"${title}", "description":"${description}", "image":"${image}", "url":"${url}", "countries":"${countries}", "StartDate":"${start}", "EndDate":"${end}", "rating":"${rating}", "PremiumFlag":"${premium}", "ActiveFlag":"${active}"}`;
+        var url = "api/Items";
+//alert(item);
+        $.ajax({
+          type: "POST",
+          url: url,
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          data: item,
+         success: function (msg) {
+              //alert('success');
+         },
+         error: function (e) {
+              //alert('fail');
+         }
+        }).done(function( msg ) {
+          //alert( "Data Saved: " + msg );
+        });
+
+    }
+};
+</script>
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add/Edit Item Form</title>
+</head>
+@*<body onload="updateItem(JSON.parse());">*@
+<body>
+    <form method="post">
+        <fieldset>
+            <legend>Add Item</legend>
+            <select class="menu" onchange="updateItem(JSON.parse(this.value));">
+                <option value='{"id":"0", "title":"", "description":"", "image":"", "itemurl":"", "countries":"", "start":"mm/dd/yyyy", "end":"mm/dd/yyyy", "rating":"", "premium":""}' selected>-- Create New Item --</option>
+                @{
+                foreach (Models.Item item in itemClient.Items) {
+                <div>
+                    <option value='{"id":"@item.Id", "title":"@item.Title", "description":"@item.Description", "image":"@item.Image", "url":"@item.Url", "countries":"@item.Countries", "start":"@item.StartDate", "end":"@item.EndDate", "rating":"@item.Rating", "premium":"@item.PremiumFlag", "active":"@item.ActiveFlag"}'>@item.Title</option>
+                </div>
+
+                Console.WriteLine(String.Format("{0} {1}", item.Title, item.PremiumFlag.ToString()));
+                }
+                }
+            </select>
+            <div style="background-color; grey;>
+                <label for="ItemId">Item Id:</label>
+                <input type="text" id="itemid" name="ItemId" value="" readonly />
+            </div>
+            <div>
+                <label for="ItemTitle">Item Title:</label>
+                <input type="text" id="itemtitle" name="ItemTitle" value="" />
+            </div>
+            <div>
+                <label for="ItemDescription">Item Description:</label>
+                <input type="text" id="itemdescription" name="ItemDescription" value="" />
+            </div>
+            <div>
+                <label for="ItemImage">Item Image:</label>
+                <input type="text" id="itemimage" name="ItemImage" value="" />
+            </div>
+            <div>
+                <label for="ItemUrl">Item Url:</label>
+                <input type="text" id="itemurl" name="ItemUrl" value="" />
+            </div>
+            <div>
+                <label for="ItemCountries">Item Countries:</label>
+                <input type="text" id="itemcountries" name="ItemCountries" value="" />
+            </div>
+            <div>
+                <label for="ItemStart">Item Start:</label>
+                <input type="date" id="itemstart" name="ItemStart" value="" />
+            </div>
+            <div>
+                <label for="ItemEnd">Item End:</label>
+                <input type="date" id="itemend" name="ItemEnd" value="" />
+            </div>
+            <div>
+                <label for="ItemRating">Item Rating:</label>
+                <input type="text" id="itemrating" name="ItemRating" value="" />
+            </div>
+            <div>
+                <label for="ItemPremium">Item Premium:</label>
+                <input type="checkbox" id="itempremium" name="ItemPremium" value="" />
+                <label for="ItemActive">Item Active:</label>
+                <input type="checkbox" id="itemactive" name="ItemActive" value="" />
+            </div>
+            <div>
+                <label>&nbsp;</label>
+                <input type="submit" value="Submit" class="submit" onclick="itemPut()" />
+                <label>&nbsp;</label>
+                <input type="submit" value="Delete" class="delete" onclick="itemDelete()" />
+            </div>
+        </fieldset>
+    </form>
+
+    <div class="image_box">
+        @*<a href="@(item.Url)"><img border="0" class="image" alt="item" src="@(item.Image)"></a>*@
+        <a href=""><img border="0" class="image" alt="item" src=""></a>
+    </div>
+
+</body>
+</html>
