@@ -87,6 +87,6 @@ POSTGRES_CONNECTION_STRING
 * Once built and running, visiting http://localhost:5001/swagger/index.html should load the swagger page. From there, the system can be tested. 
 This would also be accessible from Postman, Curl, etc.
 
-	![alt text](https://image.ibb.co/gm34zo/2018_06_26_12_26_33.png =100x20 "Swagger")
+![alt text](https://image.ibb.co/gm34zo/2018_06_26_12_26_33.png =100x20 "Swagger")
 
 
