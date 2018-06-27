@@ -1,7 +1,7 @@
 # SampleAPI
 Example API which provides CRUD operations for a Postgres DB over Entity Framework on Core 2.0
 
-###Quick Start
+## Quick Start
 
 * Download latest release
 * In Visual Studio, download assemblies from NuGet
