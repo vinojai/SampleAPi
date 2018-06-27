@@ -1,5 +1,5 @@
 # SampleAPI
-Example API which provides CRUD operations for a Postgres DB over Entity Framework on Core 2.0
+Example API which provides CRUD operations for a Postgres DB over Entity Framework on DotNet Core 2.0. This can be used as a general API template.
 
 ## Quick Start
 
